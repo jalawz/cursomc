@@ -6,10 +6,15 @@ import javax.annotation.PostConstruct;
 
 import com.cursomc.domain.Categoria;
 import com.cursomc.domain.Cidade;
+import com.cursomc.domain.Cliente;
+import com.cursomc.domain.Endereco;
 import com.cursomc.domain.Estado;
 import com.cursomc.domain.Produto;
+import com.cursomc.domain.enums.TipoCliente;
 import com.cursomc.repository.CategoriaRepository;
 import com.cursomc.repository.CidadeRepository;
+import com.cursomc.repository.ClienteRepository;
+import com.cursomc.repository.EnderecoRepository;
 import com.cursomc.repository.EstadoRepository;
 import com.cursomc.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +35,12 @@ public class CursomcApplication {
 
     @Autowired
     private CidadeRepository cidadeRepository;
+
+    @Autowired
+    private EnderecoRepository enderecoRepository;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
 
     @PostConstruct
     void init () {
@@ -62,6 +73,20 @@ public class CursomcApplication {
 
         estadoRepository.saveAll(Arrays.asList(est1, est2));
         cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
+
+        final Cliente cli1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "35959566800",
+                TipoCliente.PESSOA_FISICA);
+        cli1.getTelefones().addAll(Arrays.asList("982010547", "983868785"));
+
+        final Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 203", "Jardim das Dores", "38222112", cli1,
+                c1);
+        final Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "87878787", cli1, c2);
+
+        cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+
+        clienteRepository.saveAll(Arrays.asList(cli1));
+
+        enderecoRepository.saveAll(Arrays.asList(e1, e2));
     }
 
     public static void main (final String[] args) {

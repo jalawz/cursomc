@@ -2,6 +2,7 @@ package com.cursomc.service;
 
 import com.cursomc.domain.Categoria;
 import com.cursomc.repository.CategoriaRepository;
+import com.cursomc.service.exception.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,10 @@ public class CategoriaService {
     private final CategoriaRepository repository;
 
     public Categoria buscar (final Integer id) {
-        return repository.findById(id).orElse(null);
+        return repository.findById(id).orElseThrow(() ->
+                new ObjectNotFoundException(
+                        String.format("Objeto não encontrado! Id: %d, Tipo: %s", id, Categoria.class.getName())
+                )
+        );
     }
 }

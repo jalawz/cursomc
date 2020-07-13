@@ -11,6 +11,7 @@ import com.cursomc.domain.Cidade;
 import com.cursomc.domain.Cliente;
 import com.cursomc.domain.Endereco;
 import com.cursomc.domain.Estado;
+import com.cursomc.domain.ItemPedido;
 import com.cursomc.domain.Pagamento;
 import com.cursomc.domain.PagamentoComBoleto;
 import com.cursomc.domain.PagamentoComCartao;
@@ -23,6 +24,7 @@ import com.cursomc.repository.CidadeRepository;
 import com.cursomc.repository.ClienteRepository;
 import com.cursomc.repository.EnderecoRepository;
 import com.cursomc.repository.EstadoRepository;
+import com.cursomc.repository.ItemPedidoRepository;
 import com.cursomc.repository.PagamentoRepository;
 import com.cursomc.repository.PedidoRepository;
 import com.cursomc.repository.ProdutoRepository;
@@ -56,6 +58,9 @@ public class CursomcApplication {
 
     @Autowired
     private PagamentoRepository pagamentoRepository;
+
+    @Autowired
+    private ItemPedidoRepository itemPedidoRepository;
 
     @PostConstruct
     void init () throws ParseException {
@@ -118,6 +123,19 @@ public class CursomcApplication {
 
         pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
         pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
+
+        final ItemPedido ip1 = new ItemPedido(ped1, p1, 0.0, 1, 2000.0);
+        final ItemPedido ip2 = new ItemPedido(ped1, p3, 0.0, 2, 80.0);
+        final ItemPedido ip3 = new ItemPedido(ped2, p2, 100.0, 1, 800.0);
+
+        ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+        ped2.getItens().addAll(Arrays.asList(ip3));
+
+        p1.getItens().addAll(Arrays.asList(ip1));
+        p2.getItens().addAll(Arrays.asList(ip3));
+        p3.getItens().addAll(Arrays.asList(ip2));
+
+        itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
     }
 
     public static void main (final String[] args) {

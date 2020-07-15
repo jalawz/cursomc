@@ -6,6 +6,7 @@ import com.cursomc.domain.Categoria;
 import com.cursomc.service.CategoriaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,6 +40,13 @@ public class CategoriaResource {
     public ResponseEntity<Void> update (@PathVariable final Integer id, @RequestBody final Categoria categoria) {
         categoria.setId(id);
         service.update(categoria);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete (@PathVariable final Integer id) {
+        service.delete(id);
+
         return ResponseEntity.noContent().build();
     }
 }

@@ -18,6 +18,6 @@ public class ClienteResource {
 
     @GetMapping("/{id}")
     public ResponseEntity<Cliente> find (@PathVariable final Integer id) {
-        return ResponseEntity.ok(service.buscar(id));
+        return ResponseEntity.ok(service.find(id));
     }
 }

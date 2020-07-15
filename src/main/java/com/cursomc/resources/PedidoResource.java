@@ -18,6 +18,6 @@ public class PedidoResource {
 
     @GetMapping("/{id}")
     public ResponseEntity<Pedido> find (@PathVariable final Integer id) {
-        return ResponseEntity.ok(service.buscar(id));
+        return ResponseEntity.ok(service.find(id));
     }
 }

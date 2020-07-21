@@ -8,6 +8,7 @@ import com.cursomc.domain.Categoria;
 import com.cursomc.dto.CategoriaDTO;
 import com.cursomc.service.CategoriaService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -30,6 +32,17 @@ public class CategoriaResource {
     public ResponseEntity<List<CategoriaDTO>> findAll () {
         final List<Categoria> categorias = service.findAll();
         final List<CategoriaDTO> dtoList = categorias.stream().map(CategoriaDTO::new).collect(Collectors.toList());
+        return ResponseEntity.ok(dtoList);
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<Page<CategoriaDTO>> findPage (
+            @RequestParam(value = "page", defaultValue = "0") final Integer page,
+            @RequestParam(value = "size", defaultValue = "3") final Integer size,
+            @RequestParam(value = "orderBy", defaultValue = "nome") final String orderBy,
+            @RequestParam(value = "direction", defaultValue = "ASC") final String direction) {
+        final Page<Categoria> categorias = service.findPageable(page, size, orderBy, direction);
+        final Page<CategoriaDTO> dtoList = categorias.map(CategoriaDTO::new);
         return ResponseEntity.ok(dtoList);
     }
 

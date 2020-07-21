@@ -66,6 +66,11 @@ public class CursomcApplication {
     void init () throws ParseException {
         final Categoria cat1 = new Categoria(null, "Informática");
         final Categoria cat2 = new Categoria(null, "Escritório");
+        final Categoria cat3 = new Categoria(null, "Cama, mesa e Banho");
+        final Categoria cat4 = new Categoria(null, "Eletrônicos");
+        final Categoria cat5 = new Categoria(null, "Jardinagem");
+        final Categoria cat6 = new Categoria(null, "Decoração");
+        final Categoria cat7 = new Categoria(null, "Perfumaria");
 
         final Produto p1 = new Produto(null, "Computador", 2000.0);
         final Produto p2 = new Produto(null, "Impressora", 800.0);
@@ -78,7 +83,7 @@ public class CursomcApplication {
         p2.getCategorias().addAll(Arrays.asList(cat1, cat2));
         p3.getCategorias().addAll(Arrays.asList(cat1));
 
-        categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
+        categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
         produtoRepository.saveAll(Arrays.asList(p1, p2, p3));
 
         final Estado est1 = new Estado(null, "Minas Gerais");

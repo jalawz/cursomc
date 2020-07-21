@@ -1,5 +1,7 @@
 package com.cursomc.service;
 
+import java.util.List;
+
 import com.cursomc.domain.Categoria;
 import com.cursomc.repository.CategoriaRepository;
 import com.cursomc.service.exception.DataIntegrityException;
@@ -19,6 +21,10 @@ import org.springframework.stereotype.Service;
 public class CategoriaService {
 
     private final CategoriaRepository repository;
+
+    public List<Categoria> findAll () {
+        return repository.findAll();
+    }
 
     public Categoria find (final Integer id) {
         return repository.findById(id).orElseThrow(() ->

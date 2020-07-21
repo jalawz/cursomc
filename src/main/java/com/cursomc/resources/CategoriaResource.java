@@ -1,8 +1,11 @@
 package com.cursomc.resources;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.cursomc.domain.Categoria;
+import com.cursomc.dto.CategoriaDTO;
 import com.cursomc.service.CategoriaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class CategoriaResource {
 
     private final CategoriaService service;
+
+    @GetMapping
+    public ResponseEntity<List<CategoriaDTO>> findAll () {
+        final List<Categoria> categorias = service.findAll();
+        final List<CategoriaDTO> dtoList = categorias.stream().map(CategoriaDTO::new).collect(Collectors.toList());
+        return ResponseEntity.ok(dtoList);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Categoria> find (@PathVariable final Integer id) {
@@ -46,7 +56,6 @@ public class CategoriaResource {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete (@PathVariable final Integer id) {
         service.delete(id);
-
         return ResponseEntity.noContent().build();
     }
 }

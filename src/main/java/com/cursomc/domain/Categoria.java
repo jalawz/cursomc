@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import com.cursomc.dto.CategoriaDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -32,5 +33,9 @@ public class Categoria implements Serializable {
     public Categoria (final Integer id, final String nome) {
         this.id = id;
         this.nome = nome;
+    }
+
+    public static Categoria of (final CategoriaDTO categoriaDTO) {
+        return new Categoria(categoriaDTO.getId(), categoriaDTO.getNome());
     }
 }

@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import com.cursomc.domain.Categoria;
 import com.cursomc.dto.CategoriaDTO;
 import com.cursomc.service.CategoriaService;
@@ -52,15 +54,17 @@ public class CategoriaResource {
     }
 
     @PostMapping
-    public ResponseEntity<Void> insert (@RequestBody final Categoria categoria) {
-        final Categoria categoriaInserida = service.insert(categoria);
+    public ResponseEntity<Void> insert (@Valid @RequestBody final CategoriaDTO request) {
+        final Categoria categoriaInserida = service.insert(Categoria.of(request));
         final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(categoriaInserida.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update (@PathVariable final Integer id, @RequestBody final Categoria categoria) {
+    public ResponseEntity<Void> update (@Valid @PathVariable final Integer id,
+            @RequestBody final CategoriaDTO request) {
+        final Categoria categoria = Categoria.of(request);
         categoria.setId(id);
         service.update(categoria);
         return ResponseEntity.noContent().build();

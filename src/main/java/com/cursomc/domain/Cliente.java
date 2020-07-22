@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.CollectionTable;
@@ -17,6 +18,7 @@ import javax.persistence.OneToMany;
 
 import com.cursomc.domain.enums.TipoCliente;
 import com.cursomc.dto.ClienteDTO;
+import com.cursomc.dto.ClienteNewDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -69,5 +71,19 @@ public class Cliente implements Serializable {
 
     public static Cliente of (final ClienteDTO dto) {
         return new Cliente(dto.getId(), dto.getNome(), dto.getEmail(), null, null);
+    }
+
+    public static Cliente of (final ClienteNewDTO dto) {
+        final Cliente cli = new Cliente(null, dto.getNome(), dto.getEmail(), dto.getCpfOuCnpj(),
+                TipoCliente.toEnum(dto.getTipo()));
+        final Cidade cidade = new Cidade(dto.getCidadeId(), null, null);
+        final Endereco endereco = new Endereco(null, dto.getLogradouro(), dto.getNumero(), dto.getComplemento(),
+                dto.getBairro(), dto.getCep(), cli, cidade);
+        cli.getEnderecos().add(endereco);
+        cli.getTelefones().add(dto.getTelefone1());
+        Optional.ofNullable(dto.getTelefone2()).ifPresent(tel2 -> cli.getTelefones().add(tel2));
+        Optional.ofNullable(dto.getTelefone3()).ifPresent(tel3 -> cli.getTelefones().add(tel3));
+
+        return cli;
     }
 }

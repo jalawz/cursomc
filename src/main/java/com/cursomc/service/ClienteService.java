@@ -2,8 +2,11 @@ package com.cursomc.service;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import com.cursomc.domain.Cliente;
 import com.cursomc.repository.ClienteRepository;
+import com.cursomc.repository.EnderecoRepository;
 import com.cursomc.service.exception.DataIntegrityException;
 import com.cursomc.service.exception.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,8 @@ public class ClienteService {
 
     private final ClienteRepository repository;
 
+    private final EnderecoRepository enderecoRepository;
+
     public List<Cliente> findAll () {
         return repository.findAll();
     }
@@ -29,6 +34,14 @@ public class ClienteService {
                         String.format("Objeto não encontrado! Id: %d, Tipo: %s", id, Cliente.class.getName())
                 )
         );
+    }
+
+    @Transactional
+    public Cliente insert (final Cliente cliente) {
+        cliente.setId(null);
+        final Cliente dbCliente = repository.save(cliente);
+        enderecoRepository.saveAll(dbCliente.getEnderecos());
+        return dbCliente;
     }
 
     public Cliente update (final Cliente cliente) {

@@ -43,8 +43,9 @@ public class CategoriaService {
     }
 
     public Categoria update (final Categoria categoria) {
-        this.find(categoria.getId());
-        return repository.save(categoria);
+        final Categoria fromDB = this.find(categoria.getId());
+        updateData(fromDB, categoria);
+        return repository.save(fromDB);
     }
 
     public void delete (final Integer id) {
@@ -60,5 +61,9 @@ public class CategoriaService {
             final String direction) {
         final PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
         return repository.findAll(pageRequest);
+    }
+
+    private void updateData (final Categoria fromDB, final Categoria categoria) {
+        fromDB.setNome(categoria.getNome());
     }
 }

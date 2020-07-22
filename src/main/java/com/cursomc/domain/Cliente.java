@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.cursomc.domain.enums.TipoCliente;
+import com.cursomc.dto.ClienteDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -55,7 +56,7 @@ public class Cliente implements Serializable {
         this.nome = nome;
         this.email = email;
         this.cpfOuCnpj = cpfOuCnpj;
-        this.tipo = tipo.getCod();
+        this.tipo = tipo == null ? null : tipo.getCod();
     }
 
     public TipoCliente getTipo () {
@@ -64,5 +65,9 @@ public class Cliente implements Serializable {
 
     public void setTipo (final TipoCliente tipo) {
         this.tipo = tipo.getCod();
+    }
+
+    public static Cliente of (final ClienteDTO dto) {
+        return new Cliente(dto.getId(), dto.getNome(), dto.getEmail(), null, null);
     }
 }

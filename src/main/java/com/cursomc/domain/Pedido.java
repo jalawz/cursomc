@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -50,5 +51,11 @@ public class Pedido implements Serializable {
         this.instante = instante;
         this.cliente = cliente;
         this.enderecoDeEntrega = enderecoDeEntrega;
+    }
+
+    public Double getValorTotal () {
+        return itens.stream()
+                .map(i -> i.getSubTotal())
+                .collect(Collectors.summingDouble(Double::doubleValue));
     }
 }

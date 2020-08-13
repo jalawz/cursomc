@@ -27,6 +27,8 @@ public class PedidoService {
 
     private final ClienteService clienteService;
 
+    private final EmailService emailService;
+
     private final ItemPedidoRepository itemPedidoRepository;
 
     public Pedido find (final Integer id) {
@@ -57,7 +59,7 @@ public class PedidoService {
             itemPedido.setPedido(pedidoSalvo);
         });
         itemPedidoRepository.saveAll(pedidoSalvo.getItens());
-        System.out.println(pedidoSalvo);
+        emailService.sendOrderConfirmationEmail(pedidoSalvo);
         return pedidoSalvo;
     }
 }

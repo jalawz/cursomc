@@ -4,7 +4,7 @@ import java.text.ParseException;
 
 import com.cursomc.service.DBService;
 import com.cursomc.service.EmailService;
-import com.cursomc.service.MockEmailService;
+import com.cursomc.service.SmtpEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +25,6 @@ public class TestConfig {
 
     @Bean
     public EmailService emailService () {
-        return new MockEmailService();
+        return new SmtpEmailService();
     }
 }

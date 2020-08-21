@@ -23,6 +23,7 @@ import com.cursomc.dto.ClienteNewDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Data
 @NoArgsConstructor
@@ -41,6 +42,9 @@ public class Cliente implements Serializable {
 
     private Integer tipo;
 
+    @JsonIgnore
+    private String senha;
+
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Endereco> enderecos = new ArrayList<>();
 
@@ -54,12 +58,13 @@ public class Cliente implements Serializable {
     private List<Pedido> pedidos = new ArrayList<>();
 
     public Cliente (final Integer id, final String nome, final String email, final String cpfOuCnpj,
-            final TipoCliente tipo) {
+            final TipoCliente tipo, final String senha) {
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.cpfOuCnpj = cpfOuCnpj;
         this.tipo = tipo == null ? null : tipo.getCod();
+        this.senha = senha;
     }
 
     public TipoCliente getTipo () {
@@ -71,12 +76,13 @@ public class Cliente implements Serializable {
     }
 
     public static Cliente of (final ClienteDTO dto) {
-        return new Cliente(dto.getId(), dto.getNome(), dto.getEmail(), null, null);
+        return new Cliente(dto.getId(), dto.getNome(), dto.getEmail(), null, null, null);
     }
 
     public static Cliente of (final ClienteNewDTO dto) {
+        final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         final Cliente cli = new Cliente(null, dto.getNome(), dto.getEmail(), dto.getCpfOuCnpj(),
-                TipoCliente.toEnum(dto.getTipo()));
+                TipoCliente.toEnum(dto.getTipo()), encoder.encode(dto.getSenha()));
         final Cidade cidade = new Cidade(dto.getCidadeId(), null, null);
         final Endereco endereco = new Endereco(null, dto.getLogradouro(), dto.getNumero(), dto.getComplemento(),
                 dto.getBairro(), dto.getCep(), cli, cidade);
